@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">tazq</string>
-    <!-- Titles and Subtitles -->
     <string name="taskTitle">Task Manager</string>
     <string name="taskSubtitle">Manage Your Tasks</string>
     <string name="addTaskButton">Add Task</string>
@@ -11,6 +10,7 @@
     <string name="task_count">%d</string>
     <string name="task_limit_exceeded">Cannot add more than 50 tasks</string>
     <string name="taskListTitle">Tasks List</string>
+    <string name="empty_list">No Tasks Yet - Create Your First Task!</string>
     <string name="defaultTitle">Untitled</string>
     <string name="defaultPriority">Medium</string>
     <string name="defaultDescription">No description</string>
