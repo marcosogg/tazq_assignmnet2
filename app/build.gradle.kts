@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "ie.setu.tazq"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "ie.setu.tazq"
