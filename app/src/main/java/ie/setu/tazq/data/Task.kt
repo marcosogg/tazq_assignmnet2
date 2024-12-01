@@ -8,6 +8,7 @@ data class Task(
     val title: String = "Untitled",
     val priority: TaskPriority = TaskPriority.MEDIUM,
     val description: String = "No description",
+    val category: String = "Personal",
     val dateCreated: Date = Date(),
     val isDone: Boolean = false
 )
