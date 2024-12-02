@@ -19,4 +19,5 @@
     <string name="show_more">Show More</string>
     <string name="about_title">Task Manager</string>
     <string name="about_message">Welcome to Tazq\n\nA family-friendly task management app.\n\nOrganize, assign, and complete tasks together!</string>
+    <string name="splash_subtitle">Task Management Made Simple</string>
 </resources>

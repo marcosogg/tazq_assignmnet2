@@ -1,11 +1,9 @@
 package ie.setu.tazq
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -14,6 +12,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -24,14 +24,24 @@ import ie.setu.tazq.navigation.allDestinations
 import ie.setu.tazq.ui.components.general.BottomAppBarProvider
 import ie.setu.tazq.ui.components.general.TopAppBarProvider
 import ie.setu.tazq.ui.theme.TazqTheme
-
-private const val TAG = "Tazq"
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.i(TAG, "Tazq Started...")
+        var keepSplashScreen = true
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                keepSplashScreen
+            }
+        }
+
+        lifecycleScope.launch {
+            delay(2000) // 2 seconds
+            keepSplashScreen = false
+        }
 
         setContent {
             TazqTheme {
@@ -46,7 +56,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TazqApp(
     modifier: Modifier = Modifier,
@@ -82,4 +91,3 @@ fun TazqApp(
         }
     )
 }
-
