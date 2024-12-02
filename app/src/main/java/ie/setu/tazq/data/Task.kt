@@ -1,10 +1,14 @@
 package ie.setu.tazq.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import ie.setu.tazq.ui.components.task.TaskPriority
 import java.util.Date
-import kotlin.random.Random
 
+@Entity
 data class Task(
-    val id: Int = Random.nextInt(1, 100000),
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val title: String = "Untitled",
     val priority: TaskPriority = TaskPriority.MEDIUM,
     val description: String = "No description",
@@ -12,20 +16,3 @@ data class Task(
     val dateCreated: Date = Date(),
     val isDone: Boolean = false
 )
-
-enum class TaskPriority {
-    HIGH,
-    MEDIUM,
-    LOW
-}
-
-// Sample data for testing and previews
-val fakeTasks = List(5) { i ->
-    Task(
-        id = 12345 + i,
-        title = "Task $i",
-        priority = if (i % 2 == 0) TaskPriority.HIGH else TaskPriority.LOW,
-        description = "Description $i",
-        dateCreated = Date()
-    )
-}
