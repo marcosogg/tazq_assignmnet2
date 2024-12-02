@@ -15,7 +15,6 @@ data class Category(
     var taskCount: Int = 0
 )
 
-// Make categories accessible throughout the app
 object Categories {
     val list = listOf(
         Category("Work", Icons.Default.Work),

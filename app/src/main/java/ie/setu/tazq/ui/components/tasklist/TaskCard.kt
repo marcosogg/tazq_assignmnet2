@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
@@ -67,16 +67,12 @@ fun TaskCard(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.errorContainer)
-                    .padding(horizontal = 20.dp),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = "Delete Task",
-                    tint = MaterialTheme.colorScheme.onErrorContainer
-                )
-            }
+                    .padding(vertical = 4.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
+                        shape = MaterialTheme.shapes.medium
+                    )
+            )
         },
         content = {
             Card(
@@ -84,7 +80,7 @@ fun TaskCard(
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)  // Try this for the light blue/gray color
                 )
             ) {
                 Column(
@@ -110,17 +106,22 @@ fun TaskCard(
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.weight(1f)
                         )
-                        IconButton(onClick = onEditTask) {
+                        Spacer(modifier = Modifier.width(8.dp))  // Add space between text and icons
+                        IconButton(
+                            onClick = onEditTask,
+                            modifier = Modifier.padding(end = 12.dp)  // Increased padding between icons
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit Task"
+                                contentDescription = "Edit Task",
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
                         IconButton(onClick = { expanded = !expanded }) {
                             Icon(
-                                imageVector = if (expanded) Icons.Default.ExpandLess
-                                else Icons.Default.ExpandMore,
-                                contentDescription = if (expanded) "Show less" else "Show more"
+                                imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                                contentDescription = if (expanded) "Show less" else "Show more",
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
@@ -128,15 +129,18 @@ fun TaskCard(
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = task.description,
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = "Category: ${task.category}",
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.primary  // Navy blue
                         )
                         Text(
                             text = "Created: ${DateFormat.getDateTimeInstance().format(task.dateCreated)}",
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)  // Slightly faded
                         )
                     }
                 }
@@ -144,3 +148,4 @@ fun TaskCard(
         }
     )
 }
+

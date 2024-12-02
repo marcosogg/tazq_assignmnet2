@@ -1,5 +1,6 @@
 package ie.setu.tazq.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -62,7 +63,9 @@ fun TaskScreen(
                 onValueChange = {},
                 readOnly = true,
                 label = { Text("Category") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { expanded = true }  // Add this
             )
 
             DropdownMenu(
@@ -70,7 +73,15 @@ fun TaskScreen(
                 onDismissRequest = { expanded = false },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                val categories = listOf("Work", "Personal", "Shopping", "Health", "Study")
+                // Use the same categories from CategoryList
+                val categories = listOf(
+                    "Work",
+                    "Personal",
+                    "Shopping",
+                    "Health",
+                    "Study"
+                )
+
                 categories.forEach { category ->
                     DropdownMenuItem(
                         text = { Text(category) },
