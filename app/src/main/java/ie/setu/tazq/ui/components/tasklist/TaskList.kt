@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ie.setu.tazq.data.Task
@@ -12,7 +11,7 @@ import ie.setu.tazq.data.Task
 @Composable
 fun TaskList(
     modifier: Modifier = Modifier,
-    tasks: SnapshotStateList<Task>,
+    tasks: List<Task>,
     onDeleteTask: (Task) -> Unit,
     onEditTask: (Task) -> Unit,
     onToggleTask: (Task) -> Unit

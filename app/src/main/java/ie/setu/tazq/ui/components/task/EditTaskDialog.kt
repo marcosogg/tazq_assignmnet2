@@ -22,33 +22,72 @@ fun EditTaskDialog(
     var editedPriority by remember { mutableStateOf(task.priority) }
     var editedCategory by remember { mutableStateOf(task.category) }
 
+    // Validation states
+    var isTitleValid by remember { mutableStateOf(true) }
+    var isDescriptionValid by remember { mutableStateOf(true) }
+
+    // Error messages
+    var titleErrorMessage by remember { mutableStateOf<String?>(null) }
+    var descriptionErrorMessage by remember { mutableStateOf<String?>(null) }
+
     AlertDialog(
         onDismissRequest = onDismissRequest,
         title = { Text("Edit Task") },
         text = {
             Column {
                 TaskInput(
-                    onTaskTitleChange = { editedTitle = it }
+                    value = editedTitle,
+                    onTaskTitleChange = {
+                        editedTitle = it
+                        isTitleValid = it.length >= 3
+                        titleErrorMessage = if (!isTitleValid) {
+                            "Title must be at least 3 characters"
+                        } else null
+                    },
+                    isError = !isTitleValid,
+                    errorMessage = titleErrorMessage
                 )
+
                 TaskDescription(
-                    onDescriptionChange = { editedDescription = it }
+                    value = editedDescription,
+                    onDescriptionChange = {
+                        editedDescription = it
+                        isDescriptionValid = it.length <= 500
+                        descriptionErrorMessage = if (!isDescriptionValid) {
+                            "Description must be less than 500 characters"
+                        } else null
+                    },
+                    isError = !isDescriptionValid,
+                    errorMessage = descriptionErrorMessage
                 )
-                // Add priority and category selection here
+
+                RadioButtonGroup(
+                    selectedPriority = editedPriority,
+                    onPriorityChange = { editedPriority = it }
+                )
+
+                CategorySelector(
+                    selectedCategory = editedCategory,
+                    onCategorySelected = { editedCategory = it }
+                )
             }
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    onConfirm(
-                        task.copy(
-                            title = editedTitle,
-                            description = editedDescription,
-                            priority = editedPriority,
-                            category = editedCategory
+                    if (isTitleValid && isDescriptionValid) {
+                        onConfirm(
+                            task.copy(
+                                title = editedTitle,
+                                description = editedDescription,
+                                priority = editedPriority,
+                                category = editedCategory
+                            )
                         )
-                    )
-                    onDismissRequest()
-                }
+                        onDismissRequest()
+                    }
+                },
+                enabled = isTitleValid && isDescriptionValid
             ) {
                 Text("Save")
             }
@@ -59,4 +98,12 @@ fun EditTaskDialog(
             }
         }
     )
+}
+
+@Composable
+private fun CategorySelector(
+    selectedCategory: String,
+    onCategorySelected: (String) -> Unit
+) {
+    // Implementation from your existing CategorySelector
 }

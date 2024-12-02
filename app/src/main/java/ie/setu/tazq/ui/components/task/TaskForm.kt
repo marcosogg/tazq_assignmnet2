@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,11 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ie.setu.tazq.data.Categories
 import ie.setu.tazq.data.Task
-import ie.setu.tazq.data.TaskPriority
 
 @Composable
 fun TaskForm(
@@ -34,6 +31,10 @@ fun TaskForm(
     var selectedCategory by remember { mutableStateOf("Personal") }
     var expanded by remember { mutableStateOf(false) }
 
+    // Validation states
+    var isTitleValid by remember { mutableStateOf(false) }
+    var isDescriptionValid by remember { mutableStateOf(true) }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -41,22 +42,22 @@ fun TaskForm(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // Task Title
-        OutlinedTextField(
+        TaskInput(
             value = taskTitle,
-            onValueChange = { taskTitle = it },
-            label = { Text("Task Title") },
-            modifier = Modifier.fillMaxWidth()
+            onTaskTitleChange = {
+                taskTitle = it
+                isTitleValid = it.length >= 3
+            },
+            isError = !isTitleValid && taskTitle.isNotEmpty(),
+            errorMessage = if (!isTitleValid && taskTitle.isNotEmpty()) {
+                "Title must be at least 3 characters"
+            } else null
         )
 
         // Priority Selection
         RadioButtonGroup(
-            onPriorityChange = {
-                taskPriority = when(it) {
-                    "High Priority" -> TaskPriority.HIGH
-                    "Low Priority" -> TaskPriority.LOW
-                    else -> TaskPriority.MEDIUM
-                }
-            }
+            selectedPriority = taskPriority,
+            onPriorityChange = { taskPriority = it }
         )
 
         // Category Selection
@@ -87,42 +88,41 @@ fun TaskForm(
         }
 
         // Task Description
-        OutlinedTextField(
+        TaskDescription(
             value = taskDescription,
-            onValueChange = { taskDescription = it },
-            label = { Text("Description") },
-            modifier = Modifier.fillMaxWidth(),
-            minLines = 3
+            onDescriptionChange = {
+                taskDescription = it
+                isDescriptionValid = it.length <= 500
+            },
+            isError = !isDescriptionValid,
+            errorMessage = if (!isDescriptionValid) {
+                "Description must be less than 500 characters"
+            } else null
         )
 
         // Add Button
         Button(
             onClick = {
-                val newTask = Task(
-                    title = taskTitle,
-                    priority = taskPriority,
-                    description = taskDescription,
-                    category = selectedCategory
-                )
-                onTaskCreated(newTask)
-                // Reset form
-                taskTitle = ""
-                taskDescription = ""
-                selectedCategory = "Personal"
+                if (isTitleValid && isDescriptionValid) {
+                    val newTask = Task(
+                        title = taskTitle,
+                        priority = taskPriority,
+                        description = taskDescription,
+                        category = selectedCategory
+                    )
+                    onTaskCreated(newTask)
+                    // Reset form
+                    taskTitle = ""
+                    taskDescription = ""
+                    taskPriority = TaskPriority.MEDIUM
+                    selectedCategory = "Personal"
+                    isTitleValid = false
+                }
             },
+            enabled = isTitleValid && isDescriptionValid,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Add Task")
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun TaskFormPreview() {
-    MaterialTheme {
-        TaskForm(
-            onTaskCreated = {}
-        )
     }
 }

@@ -1,4 +1,4 @@
-package ie.setu.tazq.ui.screens
+package ie.setu.tazq.ui.screens.about
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

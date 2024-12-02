@@ -1,7 +1,7 @@
 package ie.setu.tazq.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List  // Updated import
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Info
@@ -14,7 +14,7 @@ interface AppDestination {
 }
 
 object TaskList : AppDestination {
-    override val icon = Icons.AutoMirrored.Filled.List  // Updated icon
+    override val icon = Icons.AutoMirrored.Filled.List
     override val label = "Tasks"
     override val route = "tasklist"
 }

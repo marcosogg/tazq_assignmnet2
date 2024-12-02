@@ -9,8 +9,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
@@ -18,7 +16,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import ie.setu.tazq.data.Task
 import ie.setu.tazq.navigation.AppNavGraph
 import ie.setu.tazq.navigation.TaskList
 import ie.setu.tazq.navigation.allDestinations
@@ -63,8 +60,6 @@ fun TazqApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
-    val tasks = remember { mutableStateListOf<Task>() }
-
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentNavBackStackEntry?.destination
     val currentBottomScreen = allDestinations.find { it.route == currentDestination?.route } ?: TaskList
@@ -81,8 +76,7 @@ fun TazqApp(
             AppNavGraph(
                 modifier = modifier,
                 navController = navController,
-                paddingValues = paddingValues,
-                tasks = tasks
+                paddingValues = paddingValues
             )
         },
         bottomBar = {
