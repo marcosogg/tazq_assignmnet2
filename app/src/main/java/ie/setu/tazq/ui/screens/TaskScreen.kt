@@ -91,18 +91,23 @@ fun TaskScreen(
         // Add Task Button
         Button(
             onClick = {
-                val newTask = Task(
-                    title = taskTitle,
-                    priority = taskPriority,
-                    description = taskDescription,
-                    category = selectedCategory
-                )
-                tasks.add(newTask)
-                // Reset form
-                taskTitle = ""
-                taskDescription = ""
-                selectedCategory = "Personal"
+                if (taskTitle.isNotEmpty() && taskTitle.length >= 3 &&
+                    taskDescription.length <= 500) {
+                    val newTask = Task(
+                        title = taskTitle,
+                        priority = taskPriority,
+                        description = taskDescription,
+                        category = selectedCategory
+                    )
+                    tasks.add(newTask)
+                    // Reset form
+                    taskTitle = ""
+                    taskDescription = ""
+                    selectedCategory = "Personal"
+                }
             },
+            enabled = taskTitle.isNotEmpty() && taskTitle.length >= 3 &&
+                    taskDescription.length <= 500,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Add Task")

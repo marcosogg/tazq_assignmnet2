@@ -1,28 +1,35 @@
 package ie.setu.tazq.ui.components.tasklist
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import ie.setu.tazq.data.Task
-import java.text.DateFormat
 
 @Composable
-internal fun TaskList(
+fun TaskList(
+    modifier: Modifier = Modifier,
     tasks: SnapshotStateList<Task>,
-    modifier: Modifier = Modifier
+    onDeleteTask: (Task) -> Unit,
+    onEditTask: (Task) -> Unit,
+    onToggleTask: (Task) -> Unit
 ) {
-    LazyColumn {
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         items(
             items = tasks,
             key = { task -> task.id }
         ) { task ->
             TaskCard(
-                title = task.title,
-                priority = task.priority,
-                description = task.description,
-                dateCreated = DateFormat.getDateTimeInstance().format(task.dateCreated)
+                task = task,
+                onDeleteTask = { onDeleteTask(task) },
+                onEditTask = { onEditTask(task) },
+                onToggleTask = { onToggleTask(task) }
             )
         }
     }

@@ -1,8 +1,8 @@
 package ie.setu.tazq.data
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Label
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -26,6 +26,6 @@ object Categories {
     )
 
     fun getIcon(categoryName: String): ImageVector {
-        return list.find { it.name == categoryName }?.icon ?: Icons.Default.Label
+        return list.find { it.name == categoryName }?.icon ?: Icons.AutoMirrored.Filled.Label
     }
 }
