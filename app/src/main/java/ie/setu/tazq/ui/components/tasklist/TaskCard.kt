@@ -80,7 +80,7 @@ fun TaskCard(
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)  // Try this for the light blue/gray color
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
                 )
             ) {
                 Column(
@@ -106,10 +106,10 @@ fun TaskCard(
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.weight(1f)
                         )
-                        Spacer(modifier = Modifier.width(8.dp))  // Add space between text and icons
+                        Spacer(modifier = Modifier.width(8.dp))
                         IconButton(
                             onClick = onEditTask,
-                            modifier = Modifier.padding(end = 12.dp)  // Increased padding between icons
+                            modifier = Modifier.padding(end = 12.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
@@ -135,12 +135,17 @@ fun TaskCard(
                         Text(
                             text = "Category: ${task.category}",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.primary  // Navy blue
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = "Priority: ${task.priority}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.primary
                         )
                         Text(
                             text = "Created: ${DateFormat.getDateTimeInstance().format(task.dateCreated)}",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)  // Slightly faded
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )
                     }
                 }
@@ -148,4 +153,3 @@ fun TaskCard(
         }
     )
 }
-

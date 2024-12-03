@@ -28,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ie.setu.tazq.data.Task
+import ie.setu.tazq.ui.components.task.EditTaskDialog
 import ie.setu.tazq.ui.components.tasklist.TaskList
 
 @Composable
@@ -39,6 +41,19 @@ fun TaskListScreen(
     var searchQuery by remember { mutableStateOf("") }
     var showSortMenu by remember { mutableStateOf(false) }
     var showSearchBar by remember { mutableStateOf(false) }
+    var taskToEdit by remember { mutableStateOf<Task?>(null) }
+
+    // Show edit dialog when taskToEdit is not null
+    taskToEdit?.let { task ->
+        EditTaskDialog(
+            task = task,
+            onDismissRequest = { taskToEdit = null },
+            onConfirm = { editedTask ->
+                viewModel.updateTask(editedTask)
+                taskToEdit = null
+            }
+        )
+    }
 
     Column(
         modifier = modifier.padding(
@@ -150,7 +165,7 @@ fun TaskListScreen(
                 tasks = tasks,
                 onDeleteTask = { task -> viewModel.deleteTask(task) },
                 onToggleTask = { task -> viewModel.updateTaskStatus(task) },
-                onEditTask = { /* Will implement later */ }
+                onEditTask = { task -> taskToEdit = task }
             )
         }
     }

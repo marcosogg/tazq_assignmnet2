@@ -4,8 +4,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,6 +34,41 @@ fun TaskScreen(
     val selectedCategory by viewModel.selectedCategory.collectAsState()
     val isTitleValid by viewModel.isTitleValid.collectAsState()
     val isDescriptionValid by viewModel.isDescriptionValid.collectAsState()
+    val showConfirmation by viewModel.showConfirmation.collectAsState()
+
+    if (showConfirmation) {
+        AlertDialog(
+            onDismissRequest = { viewModel.hideConfirmation() },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.CheckCircle,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            },
+            title = {
+                Text(
+                    text = "Task Created!",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            },
+            text = {
+                Text(
+                    text = "Your task has been added successfully.",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = { viewModel.hideConfirmation() }
+                ) {
+                    Text("OK")
+                }
+            },
+            containerColor = MaterialTheme.colorScheme.surface,
+            tonalElevation = 8.dp
+        )
+    }
 
     Column(
         modifier = modifier.padding(16.dp),
@@ -45,7 +86,6 @@ fun TaskScreen(
             onPriorityChange = { viewModel.updateTaskPriority(it) }
         )
 
-        // Use the CategoryDropdown component
         CategoryDropdown(
             selectedCategory = selectedCategory,
             onCategorySelected = { viewModel.updateSelectedCategory(it) },
@@ -68,4 +108,3 @@ fun TaskScreen(
         }
     }
 }
-

@@ -35,6 +35,9 @@ class TaskViewModel @Inject constructor(
     private val _isDescriptionValid = MutableStateFlow(false)
     val isDescriptionValid: StateFlow<Boolean> = _isDescriptionValid.asStateFlow()
 
+    private val _showConfirmation = MutableStateFlow(false)
+    val showConfirmation: StateFlow<Boolean> = _showConfirmation.asStateFlow()
+
     fun updateTaskTitle(title: String) {
         _taskTitle.value = title
         validateTitle(title)
@@ -65,6 +68,14 @@ class TaskViewModel @Inject constructor(
         return _isTitleValid.value && _isDescriptionValid.value
     }
 
+    fun showConfirmation() {
+        _showConfirmation.value = true
+    }
+
+    fun hideConfirmation() {
+        _showConfirmation.value = false
+    }
+
     fun addTask() {
         if (!isFormValid()) return
 
@@ -77,6 +88,7 @@ class TaskViewModel @Inject constructor(
 
         viewModelScope.launch {
             repository.insert(newTask)
+            showConfirmation()
             resetForm()
         }
     }

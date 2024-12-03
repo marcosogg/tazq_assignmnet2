@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ie.setu.tazq.data.Task
-import ie.setu.tazq.ui.components.task.TaskPriority
 import ie.setu.tazq.data.repository.TaskRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -43,6 +42,14 @@ class TaskListViewModel @Inject constructor(
     fun updateTaskStatus(task: Task) {
         viewModelScope.launch {
             repository.updateTaskStatus(task.id, !task.isDone)
+            // No need to update _tasks manually as Flow will trigger automatically
+        }
+    }
+
+    // Update task
+    fun updateTask(task: Task) {
+        viewModelScope.launch {
+            repository.update(task)
             // No need to update _tasks manually as Flow will trigger automatically
         }
     }
