@@ -1,5 +1,7 @@
 package ie.setu.tazq.ui.screens.task
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,13 +40,22 @@ class TaskViewModel @Inject constructor(
     private val _showConfirmation = MutableStateFlow(false)
     val showConfirmation: StateFlow<Boolean> = _showConfirmation.asStateFlow()
 
+    // New state for tracking field interaction
+    private val _titleTouched = mutableStateOf(false)
+    val titleTouched: State<Boolean> = _titleTouched
+
+    private val _descriptionTouched = mutableStateOf(false)
+    val descriptionTouched: State<Boolean> = _descriptionTouched
+
     fun updateTaskTitle(title: String) {
         _taskTitle.value = title
+        _titleTouched.value = true
         validateTitle(title)
     }
 
     fun updateTaskDescription(description: String) {
         _taskDescription.value = description
+        _descriptionTouched.value = true
         validateDescription(description)
     }
 
@@ -100,18 +111,20 @@ class TaskViewModel @Inject constructor(
         _selectedCategory.value = "Personal"
         _isTitleValid.value = false
         _isDescriptionValid.value = false
+        _titleTouched.value = false
+        _descriptionTouched.value = false
     }
 
     fun getTitleErrorMessage(): String? {
-        return if (_taskTitle.value.isEmpty()) {
+        return if (_titleTouched.value && _taskTitle.value.isEmpty()) {
             "Title cannot be empty"
-        } else if (_taskTitle.value.length < 3) {
+        } else if (_titleTouched.value && _taskTitle.value.length < 3) {
             "Title must be at least 3 characters"
         } else null
     }
 
     fun getDescriptionErrorMessage(): String? {
-        return if (_taskDescription.value.length > 500) {
+        return if (_descriptionTouched.value && _taskDescription.value.length > 500) {
             "Description must be less than 500 characters"
         } else null
     }

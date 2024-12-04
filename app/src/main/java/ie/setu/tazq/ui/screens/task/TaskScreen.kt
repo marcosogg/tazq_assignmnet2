@@ -35,6 +35,8 @@ fun TaskScreen(
     val isTitleValid by viewModel.isTitleValid.collectAsState()
     val isDescriptionValid by viewModel.isDescriptionValid.collectAsState()
     val showConfirmation by viewModel.showConfirmation.collectAsState()
+    val titleTouched by viewModel.titleTouched
+    val descriptionTouched by viewModel.descriptionTouched
 
     if (showConfirmation) {
         AlertDialog(
@@ -77,8 +79,8 @@ fun TaskScreen(
         TaskInput(
             value = taskTitle,
             onTaskTitleChange = { viewModel.updateTaskTitle(it) },
-            isError = !isTitleValid,
-            errorMessage = viewModel.getTitleErrorMessage()
+            isError = titleTouched && !isTitleValid,
+            errorMessage = if (titleTouched) viewModel.getTitleErrorMessage() else null
         )
 
         RadioButtonGroup(
@@ -95,8 +97,8 @@ fun TaskScreen(
         TaskDescription(
             value = taskDescription,
             onDescriptionChange = { viewModel.updateTaskDescription(it) },
-            isError = !isDescriptionValid,
-            errorMessage = viewModel.getDescriptionErrorMessage()
+            isError = descriptionTouched && !isDescriptionValid,
+            errorMessage = if (descriptionTouched) viewModel.getDescriptionErrorMessage() else null
         )
 
         Button(
