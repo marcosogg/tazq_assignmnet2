@@ -2,9 +2,11 @@ package ie.setu.tazq.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.ui.graphics.vector.ImageVector
 
 interface AppDestination {
@@ -35,6 +37,18 @@ object About : AppDestination {
     override val icon = Icons.Default.Info
     override val label = "About"
     override val route = "about"
+}
+
+object SignIn : AppDestination {
+    override val icon = Icons.AutoMirrored.Filled.Login
+    override val label = "Sign In"
+    override val route = "signin"
+}
+
+object SignUp : AppDestination {
+    override val icon = Icons.Default.PersonAdd
+    override val label = "Sign Up"
+    override val route = "signup"
 }
 
 val bottomAppBarDestinations = listOf(TaskList, CreateTask, Categories, About)

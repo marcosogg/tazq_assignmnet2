@@ -35,6 +35,7 @@ import ie.setu.tazq.ui.components.tasklist.TaskList
 @Composable
 fun TaskListScreen(
     modifier: Modifier = Modifier,
+    onSignOut: () -> Unit = {},
     viewModel: TaskListViewModel = hiltViewModel()
 ) {
     val tasks by viewModel.tasks.collectAsState()
