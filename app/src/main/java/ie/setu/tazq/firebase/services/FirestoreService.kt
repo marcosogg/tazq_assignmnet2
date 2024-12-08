@@ -7,10 +7,9 @@ typealias Task = TaskModel
 typealias Tasks = Flow<List<Task>>
 
 interface FirestoreService {
-
-    suspend fun getAll(email: String) : Task
-    suspend fun get(email: String, TaskId: String) : Task?
-    suspend fun insert(email: String, Task: Task)
-    suspend fun update(email: String, Task: Task)
-    suspend fun delete(email: String, TaskId: String)
+    suspend fun getAll(email: String): Tasks
+    suspend fun get(email: String, taskId: String): Task?
+    suspend fun insert(email: String, task: Task)
+    suspend fun update(email: String, task: Task)
+    suspend fun delete(email: String, taskId: String)
 }

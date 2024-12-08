@@ -121,7 +121,7 @@ fun LoginScreen(
                 }
                 is Response.Success -> {
                     LaunchedEffect(Unit) {
-                        navController.navigate("home") {
+                        navController.navigate("Home") {
                             popUpTo("login") {
                                 inclusive = true
                             }

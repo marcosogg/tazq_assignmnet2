@@ -7,21 +7,23 @@ import java.util.Date
 @Entity
 data class TaskModel(
     @DocumentId val _id: String = "N/A",
-    val paymentType: String = "N/A",
-    val paymentAmount: Int = 0,
-    var message: String = "Go Homer!",
-    val dateDonated: Date = Date(),
+    val title: String = "Untitled",
+    val priority: String = "MEDIUM",  // Store as string for Firestore compatibility
+    val description: String = "No description",
+    val category: String = "Personal",
+    val dateCreated: Date = Date(),
     val dateModified: Date = Date(),
-    var email: String = "joe@bloggs.com"
+    val isDone: Boolean = false,
+    var email: String = "joe@bloggs.com"  // Required for Firebase
 )
 
-val fakeTask = List(30) { i ->
+// For testing/preview purposes
+val fakeTasks = List(30) { i ->
     TaskModel(
-        _id = "12345" + i,
-        "PayPal $i",
-        i.toInt(),
-        "Message $i",
-        Date(),
-        Date()
+        _id = "12345$i",
+        title = "Task $i",
+        description = "Description $i",
+        dateCreated = Date(),
+        dateModified = Date()
     )
 }
