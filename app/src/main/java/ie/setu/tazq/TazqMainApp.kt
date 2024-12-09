@@ -10,8 +10,7 @@ import timber.log.Timber
 class TazqMainApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        Firebase.initialize(this)
         Timber.plant(Timber.DebugTree())
-        Timber.i("Starting Tazq Application")
-        Firebase.initialize(context = this)
     }
 }

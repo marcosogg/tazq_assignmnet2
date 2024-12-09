@@ -34,11 +34,11 @@ fun BottomAppBarProvider(
             NavigationBarItem(
                 selected = navigationItem == currentScreen,
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.onPrimary,  // Changed to white
-                    selectedTextColor = MaterialTheme.colorScheme.onPrimary,  // Changed to white
-                    unselectedIconColor = MaterialTheme.colorScheme.primaryContainer,  // Light navy
-                    unselectedTextColor = MaterialTheme.colorScheme.primaryContainer,  // Light navy
-                    indicatorColor = MaterialTheme.colorScheme.primaryContainer  // Light navy background for selected item
+                    selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unselectedIconColor = MaterialTheme.colorScheme.primaryContainer,
+                    unselectedTextColor = MaterialTheme.colorScheme.primaryContainer,
+                    indicatorColor = MaterialTheme.colorScheme.primaryContainer
                 ),
                 label = {
                     Text(text = navigationItem.label)
@@ -50,13 +50,26 @@ fun BottomAppBarProvider(
                     )
                 },
                 onClick = {
-                    navigationSelectedItem = index
-                    navController.navigate(navigationItem.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                    // Only navigate if we're not already on this screen
+                    if (navigationItem.route != currentScreen.route) {
+                        navigationSelectedItem = index
+                        try {
+                            navController.navigate(navigationItem.route) {
+                                // Pop up to the start destination of the graph to
+                                // avoid building up a large stack of destinations
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                // Avoid multiple copies of the same destination when
+                                // reselecting the same item
+                                launchSingleTop = true
+                                // Restore state when reselecting a previously selected item
+                                restoreState = true
+                            }
+                        } catch (e: IllegalArgumentException) {
+                            // Log the error but don't crash
+                            e.printStackTrace()
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
                 }
             )

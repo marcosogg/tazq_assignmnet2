@@ -11,9 +11,10 @@ import ie.setu.tazq.ui.theme.TazqTheme
 class TazqMainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
-            TazqTheme { HomeScreen() }
+            TazqTheme {
+                    HomeScreen()
+            }
         }
     }
 }
