@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import ie.setu.tazq.R
 import ie.setu.tazq.firebase.auth.Response
+import ie.setu.tazq.navigation.TaskList
 import ie.setu.tazq.ui.components.auth.AuthButton
 import ie.setu.tazq.ui.components.auth.AuthTextField
 import ie.setu.tazq.ui.components.auth.GoogleSignInButton
@@ -121,7 +122,7 @@ fun LoginScreen(
                 }
                 is Response.Success -> {
                     LaunchedEffect(Unit) {
-                        navController.navigate("Home") {
+                        navController.navigate(TaskList.route) {
                             popUpTo("login") {
                                 inclusive = true
                             }
