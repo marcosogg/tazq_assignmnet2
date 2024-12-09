@@ -44,18 +44,8 @@ fun TopAppBarProvider(
                         modifier = Modifier.size(30.dp)
                     )
                 }
-            } else {
-                Icon(
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = "Menu Button",
-                    tint = Color.White,
-                    modifier = Modifier.size(30.dp)
-                )
             }
         },
-        actions = {
-            DropDownMenu()
-        }
     )
 }
 
