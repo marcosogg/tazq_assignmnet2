@@ -15,8 +15,6 @@ import ie.setu.tazq.navigation.Login
 import ie.setu.tazq.navigation.NavHostProvider
 import ie.setu.tazq.navigation.TaskList
 import ie.setu.tazq.navigation.allDestinations
-import ie.setu.tazq.navigation.bottomAppBarDestinations
-import ie.setu.tazq.navigation.userSignedOutDestinations
 import ie.setu.tazq.ui.components.general.BottomAppBarProvider
 import ie.setu.tazq.ui.components.general.TopAppBarProvider
 import ie.setu.tazq.ui.theme.TazqTheme
@@ -36,11 +34,7 @@ fun HomeScreen(
     val userId = homeViewModel.currentUser?.uid ?: ""
 
     var startDestination = currentBottomScreen
-    val currentUser = homeViewModel.currentUser
     val isActiveSession = homeViewModel.isAuthenticated()
-    val userDestinations = if (!isActiveSession)
-        userSignedOutDestinations
-    else bottomAppBarDestinations
 
     if (isActiveSession) startDestination = TaskList
 
@@ -53,13 +47,15 @@ fun HomeScreen(
             ) { navController.navigateUp() }
         },
         content = { paddingValues ->
-            val userId = homeViewModel.currentUser
+            // Optionally rename or remove the inner declaration
+            // val currentUser = homeViewModel.currentUser
+
             NavHostProvider(
                 modifier = modifier,
                 navController = navController,
                 startDestination = startDestination,
                 paddingValues = paddingValues,
-                userId = userId
+                userId = userId  // This now correctly refers to the String userId
             )
         },
         bottomBar = {
@@ -72,6 +68,7 @@ fun HomeScreen(
         }
     )
 }
+
 
 @Preview(showBackground = true)
 @Composable
