@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ie.setu.tazq.data.Task
 import ie.setu.tazq.data.repository.TaskRepository
+import ie.setu.tazq.firebase.services.AuthService
 import ie.setu.tazq.ui.components.task.TaskPriority
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,8 +17,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskViewModel @Inject constructor(
-    private val repository: TaskRepository
+    private val repository: TaskRepository,
+    private val authService: AuthService // Inject AuthService here
 ) : ViewModel() {
+
+    // Current user ID
+    val currentUserId: String = authService.currentUserId
 
     private val _taskTitle = MutableStateFlow("")
     val taskTitle: StateFlow<String> = _taskTitle.asStateFlow()
@@ -91,6 +96,7 @@ class TaskViewModel @Inject constructor(
         if (!isFormValid()) return
 
         val newTask = Task(
+            userId = currentUserId,
             title = _taskTitle.value,
             priority = _taskPriority.value,
             description = _taskDescription.value,

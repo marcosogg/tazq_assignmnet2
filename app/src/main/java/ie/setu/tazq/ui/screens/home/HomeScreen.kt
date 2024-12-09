@@ -33,6 +33,7 @@ fun HomeScreen(
     val currentBottomScreen = allDestinations.find {
         it.route == currentDestination?.route
     } ?: Login
+    val userId = homeViewModel.currentUser?.uid ?: ""
 
     var startDestination = currentBottomScreen
     val currentUser = homeViewModel.currentUser
@@ -52,11 +53,13 @@ fun HomeScreen(
             ) { navController.navigateUp() }
         },
         content = { paddingValues ->
+            val userId = homeViewModel.currentUser
             NavHostProvider(
                 modifier = modifier,
                 navController = navController,
                 startDestination = startDestination,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                userId = userId
             )
         },
         bottomBar = {

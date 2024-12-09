@@ -9,6 +9,7 @@ import java.util.Date
 data class Task(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+    val userId: String = "",
     val title: String = "Untitled",
     val priority: TaskPriority = TaskPriority.MEDIUM,
     val description: String = "No description",

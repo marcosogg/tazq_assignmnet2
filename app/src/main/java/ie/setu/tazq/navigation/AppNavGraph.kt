@@ -20,7 +20,8 @@ fun NavHostProvider(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     startDestination: AppDestination,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    userId: String
 ) {
     NavHost(
         navController = navController,
@@ -36,7 +37,10 @@ fun NavHostProvider(
         }
 
         composable(route = Categories.route) {
-            CategoriesScreen(modifier = modifier)
+            CategoriesScreen(
+                modifier = modifier,
+                userId = userId)
+
         }
 
         composable(route = About.route) {
