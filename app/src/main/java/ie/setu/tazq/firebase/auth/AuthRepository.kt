@@ -81,7 +81,6 @@ class AuthRepository
             val authResult = firebaseAuth.signInWithCredential(googleCredential).await()
             val isNewUser = authResult.additionalUserInfo?.isNewUser ?: false
             if (isNewUser) {
-                //   addUserToFirestore()
             }
             Response.Success(true)
         } catch (e: Exception) {

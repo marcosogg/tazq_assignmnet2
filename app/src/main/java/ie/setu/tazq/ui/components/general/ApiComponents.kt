@@ -139,6 +139,5 @@ fun UtilsPreview() {
         ShowError(headline = "Main Error Message",
             subtitle = "more error information", onClick = {})
         ShowLoader("Trying to Donate...")
-        //   ShowRefreshList(onClick = {})
     }
 }

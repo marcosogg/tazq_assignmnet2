@@ -111,7 +111,6 @@ class LoginViewModel @Inject constructor(
                 )
                 handleSignIn(result)
             } catch (e: GetCredentialException) {
-                // handleFailure(e)
             }
         }
     }
@@ -129,15 +128,7 @@ class LoginViewModel @Inject constructor(
                         Timber.tag("TAG").e(e, "Received an invalid google id token response")
                     }
                 }
-//                else {
-//                    // Catch any unrecognized custom credential type here.
-//                    Timber.tag("TAG").e("Unexpected type of credential")
-//                }
             }
-//            else -> {
-//                // Catch any unrecognized credential type here.
-//                Timber.tag("TAG").e("Unexpected type of credential")
-//            }
         }
     }
 }

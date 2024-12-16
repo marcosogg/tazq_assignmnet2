@@ -47,15 +47,13 @@ fun HomeScreen(
             ) { navController.navigateUp() }
         },
         content = { paddingValues ->
-            // Optionally rename or remove the inner declaration
-            // val currentUser = homeViewModel.currentUser
 
             NavHostProvider(
                 modifier = modifier,
                 navController = navController,
                 startDestination = startDestination,
                 paddingValues = paddingValues,
-                userId = userId  // This now correctly refers to the String userId
+                userId = userId
             )
         },
         bottomBar = {

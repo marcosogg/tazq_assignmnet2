@@ -19,7 +19,7 @@ interface TaskDAO {
     @Insert
     suspend fun insert(task: Task)
 
-    @Update  // Add this function
+    @Update
     suspend fun update(task: Task)
 
     @Query("UPDATE task SET isDone = :isDone WHERE id = :id AND userId = :userId")
