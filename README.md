@@ -1,6 +1,3 @@
-Okay, here's a comprehensive README.md file (including a technical report) for the Tazq project, incorporating the elements you requested:
-
-```markdown
 # Tazq: A Family-Friendly Task Management App
 
 ## Overview
