@@ -16,10 +16,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ie.setu.tazq.navigation.AppDestination
-import ie.setu.tazq.navigation.Categories
-import ie.setu.tazq.navigation.CreateFamilyGroup
-import ie.setu.tazq.navigation.CreateTask
-import ie.setu.tazq.navigation.TaskList
 import ie.setu.tazq.navigation.bottomAppBarDestinations
 import ie.setu.tazq.ui.theme.TazqTheme
 
@@ -34,14 +30,7 @@ fun BottomAppBarProvider(
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
     ) {
-        val bottomNavItems = listOf(
-            TaskList,
-            CreateTask,
-            Categories,
-            CreateFamilyGroup
-        )
-
-        bottomNavItems.forEachIndexed { index, navigationItem ->
+        bottomAppBarDestinations.forEachIndexed { index, navigationItem ->
             NavigationBarItem(
                 selected = navigationItem == currentScreen,
                 colors = NavigationBarItemDefaults.colors(
@@ -66,13 +55,19 @@ fun BottomAppBarProvider(
                         navigationSelectedItem = index
                         try {
                             navController.navigate(navigationItem.route) {
+                                // Pop up to the start destination of the graph to
+                                // avoid building up a large stack of destinations
                                 popUpTo(navController.graph.findStartDestination().id) {
                                     saveState = true
                                 }
+                                // Avoid multiple copies of the same destination when
+                                // reselecting the same item
                                 launchSingleTop = true
+                                // Restore state when reselecting a previously selected item
                                 restoreState = true
                             }
                         } catch (e: IllegalArgumentException) {
+                            // Log the error but don't crash
                             e.printStackTrace()
                         }
                     }
