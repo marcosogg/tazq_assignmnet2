@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ie.setu.tazq.data.Task
 import ie.setu.tazq.data.repository.TaskRepository
+import ie.setu.tazq.firebase.services.AuthService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,51 +14,44 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskListViewModel @Inject constructor(
-    private val repository: TaskRepository
+    private val repository: TaskRepository,
+    private val authService: AuthService // Inject AuthService
 ) : ViewModel() {
-    // Backing property for tasks
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
-
-    // Public immutable flow of tasks
     val tasks: StateFlow<List<Task>> = _tasks.asStateFlow()
 
-    // Initialize the ViewModel by collecting tasks from repository
+    // Get userId from AuthService
+    private val currentUserId: String = authService.currentUserId
+
     init {
         viewModelScope.launch {
-            repository.getAll().collect { listOfTasks ->
+            repository.getAll(userId = currentUserId).collect { listOfTasks ->
                 _tasks.value = listOfTasks
             }
         }
     }
 
-    // Delete a task
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             repository.delete(task)
-            // No need to update _tasks manually as Flow will trigger automatically
         }
     }
 
-    // Toggle task completion status
     fun updateTaskStatus(task: Task) {
         viewModelScope.launch {
-            repository.updateTaskStatus(task.id, !task.isDone)
-            // No need to update _tasks manually as Flow will trigger automatically
+            repository.updateTaskStatus(task.id, !task.isDone, currentUserId) // Pass currentUserId
         }
     }
 
-    // Update task
     fun updateTask(task: Task) {
         viewModelScope.launch {
             repository.update(task)
-            // No need to update _tasks manually as Flow will trigger automatically
         }
     }
 
-    // Optional: Add search functionality
     fun searchTasks(query: String) {
         viewModelScope.launch {
-            repository.getAll().collect { allTasks ->
+            repository.getAll(currentUserId).collect { allTasks ->  // Filter tasks by currentUserId
                 _tasks.value = allTasks.filter { task ->
                     task.title.contains(query, ignoreCase = true) ||
                             task.description.contains(query, ignoreCase = true)
@@ -66,20 +60,18 @@ class TaskListViewModel @Inject constructor(
         }
     }
 
-    // Optional: Add sorting functionality
     fun sortTasks(sortBy: SortOption) {
         viewModelScope.launch {
             val currentTasks = _tasks.value
             _tasks.value = when (sortBy) {
                 SortOption.DATE -> currentTasks.sortedByDescending { it.dateCreated }
-                SortOption.PRIORITY -> currentTasks.sortedBy { it.priority }
+                SortOption.PRIORITY -> currentTasks.sortedBy { it.priority.ordinal } // Sort by priority ordinal
                 SortOption.CATEGORY -> currentTasks.sortedBy { it.category }
             }
         }
     }
 }
 
-// Enum for sorting options
 enum class SortOption {
     DATE,
     PRIORITY,

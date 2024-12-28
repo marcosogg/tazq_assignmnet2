@@ -19,10 +19,19 @@ class CategoriesViewModel @Inject constructor(
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
     val tasks: StateFlow<List<Task>> = _tasks.asStateFlow()
 
-    init {
+    private var userId: String = "" // Store the userId
+
+    fun setUserId(userId: String) {  // Call this to set the userId
+        this.userId = userId
+        loadTasks()                // Load the tasks for the user
+    }
+
+    private fun loadTasks() { // Function to fetch user-specific tasks
         viewModelScope.launch {
-            repository.getAll().collect { listOfTasks ->
-                _tasks.value = listOfTasks
+            if (userId.isNotEmpty()) { // Only load if userId is available
+                repository.getAll(userId = userId).collect { listOfTasks ->
+                    _tasks.value = listOfTasks
+                }
             }
         }
     }

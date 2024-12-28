@@ -6,17 +6,14 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class TaskRepository @Inject constructor(private val taskDAO: TaskDAO) {
-    fun getAll(): Flow<List<Task>> = taskDAO.getAll()
+    fun getAll(userId: String): Flow<List<Task>> = taskDAO.getAll(userId)
+    fun get(id: Int, userId: String): Flow<Task> = taskDAO.get(id, userId)
 
-    fun get(id: Int): Flow<Task> = taskDAO.get(id)
+    suspend fun insert(task: Task) = taskDAO.insert(task)
+    suspend fun update(task: Task) = taskDAO.update(task)
+    suspend fun delete(task: Task) = taskDAO.delete(task)
 
-    suspend fun insert(task: Task) { taskDAO.insert(task) }
-
-    suspend fun update(task: Task) { taskDAO.update(task) }
-
-    suspend fun delete(task: Task) { taskDAO.delete(task) }
-
-    suspend fun updateTaskStatus(id: Int, isDone: Boolean) {
-        taskDAO.updateTaskStatus(id, isDone)
+    suspend fun updateTaskStatus(id: Int, isDone: Boolean, userId: String) {
+        taskDAO.updateTaskStatus(id, isDone, userId)
     }
 }

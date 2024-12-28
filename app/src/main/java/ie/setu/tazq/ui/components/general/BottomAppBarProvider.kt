@@ -16,6 +16,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ie.setu.tazq.navigation.AppDestination
+import ie.setu.tazq.navigation.Categories
+import ie.setu.tazq.navigation.CreateFamilyGroup
+import ie.setu.tazq.navigation.CreateTask
+import ie.setu.tazq.navigation.TaskList
 import ie.setu.tazq.navigation.bottomAppBarDestinations
 import ie.setu.tazq.ui.theme.TazqTheme
 
@@ -30,15 +34,22 @@ fun BottomAppBarProvider(
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
     ) {
-        bottomAppBarDestinations.forEachIndexed { index, navigationItem ->
+        val bottomNavItems = listOf(
+            TaskList,
+            CreateTask,
+            Categories,
+            CreateFamilyGroup
+        )
+
+        bottomNavItems.forEachIndexed { index, navigationItem ->
             NavigationBarItem(
                 selected = navigationItem == currentScreen,
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.onPrimary,  // Changed to white
-                    selectedTextColor = MaterialTheme.colorScheme.onPrimary,  // Changed to white
-                    unselectedIconColor = MaterialTheme.colorScheme.primaryContainer,  // Light navy
-                    unselectedTextColor = MaterialTheme.colorScheme.primaryContainer,  // Light navy
-                    indicatorColor = MaterialTheme.colorScheme.primaryContainer  // Light navy background for selected item
+                    selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unselectedIconColor = MaterialTheme.colorScheme.primaryContainer,
+                    unselectedTextColor = MaterialTheme.colorScheme.primaryContainer,
+                    indicatorColor = MaterialTheme.colorScheme.primaryContainer
                 ),
                 label = {
                     Text(text = navigationItem.label)
@@ -50,13 +61,20 @@ fun BottomAppBarProvider(
                     )
                 },
                 onClick = {
-                    navigationSelectedItem = index
-                    navController.navigate(navigationItem.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                    // Only navigate if we're not already on this screen
+                    if (navigationItem.route != currentScreen.route) {
+                        navigationSelectedItem = index
+                        try {
+                            navController.navigate(navigationItem.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        } catch (e: IllegalArgumentException) {
+                            e.printStackTrace()
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
                 }
             )

@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import ie.setu.tazq.data.Task
 import java.text.DateFormat
@@ -45,7 +46,7 @@ fun TaskCard(
     task: Task,
     onDeleteTask: () -> Unit,
     onEditTask: () -> Unit,
-    onToggleTask: () -> Unit
+    onToggleTask: (Task) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     val dismissState = rememberSwipeToDismissBoxState(
@@ -56,6 +57,7 @@ fun TaskCard(
                     onDeleteTask()
                     true
                 }
+
                 else -> false
             }
         }
@@ -99,11 +101,16 @@ fun TaskCard(
                     ) {
                         Checkbox(
                             checked = task.isDone,
-                            onCheckedChange = { onToggleTask() }
+                            onCheckedChange = { isChecked ->
+                                onToggleTask(task.copy(isDone = isChecked))
+                            }
                         )
                         Text(
                             text = task.title,
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                textDecoration = if (task.isDone) TextDecoration.LineThrough else TextDecoration.None, // Apply strikethrough if task is done
+                                color = if (task.isDone) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f) else MaterialTheme.colorScheme.onSurface // Change color if task is done
+                            ),
                             modifier = Modifier.weight(1f)
                         )
                         Spacer(modifier = Modifier.width(8.dp))

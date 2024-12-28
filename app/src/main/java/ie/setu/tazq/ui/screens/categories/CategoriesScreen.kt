@@ -15,8 +15,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun CategoriesScreen(
     modifier: Modifier = Modifier,
+    userId: String,
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
+    viewModel.setUserId(userId)
+
     val tasks by viewModel.tasks.collectAsState()
 
     Column(

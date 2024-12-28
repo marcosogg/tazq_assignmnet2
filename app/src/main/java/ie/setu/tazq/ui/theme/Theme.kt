@@ -7,6 +7,11 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
+val startGradientColor = Color(0xFF1e88e5)
+val endGradientColor = Color(0xFF005cb2)
+val gStartGradientColor = Color(0xFF013B6E)
+val gEndGradientColor = Color(0xFF2189EB)
+
 // Convert XML colors to Compose Color objects
 private val NavyPrimary = Color(0xFF1B3B6F)
 private val NavyLight = Color(0xFF2C5494)

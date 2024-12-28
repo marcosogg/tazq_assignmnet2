@@ -1,9 +1,9 @@
 package ie.setu.tazq.ui.components.general
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,7 +22,8 @@ import ie.setu.tazq.navigation.AppDestination
 fun TopAppBarProvider(
     currentScreen: AppDestination,
     canNavigateBack: Boolean,
-    navigateUp: () -> Unit = {}
+    navigateUp: () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {} // Add this line for actions
 ) {
     TopAppBar(
         title = {
@@ -44,18 +45,8 @@ fun TopAppBarProvider(
                         modifier = Modifier.size(30.dp)
                     )
                 }
-            } else {
-                Icon(
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = "Menu Button",
-                    tint = Color.White,
-                    modifier = Modifier.size(30.dp)
-                )
             }
         },
-        actions = {
-            DropDownMenu()
-        }
+        actions = actions // Add the actions parameter to the TopAppBar
     )
 }
-
