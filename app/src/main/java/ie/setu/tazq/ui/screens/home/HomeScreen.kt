@@ -25,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ie.setu.tazq.navigation.About
 import ie.setu.tazq.navigation.Login
+import ie.setu.tazq.navigation.MyFamilyGroups
 import ie.setu.tazq.navigation.NavHostProvider
 import ie.setu.tazq.navigation.Profile
 import ie.setu.tazq.navigation.TaskList
@@ -44,7 +45,7 @@ fun HomeScreen(
     val currentDestination = currentNavBackStackEntry?.destination
     val currentBottomScreen = allDestinations.find {
         it.route == currentDestination?.route
-    } ?: Login
+    } ?: Login // Default to Login if no destination is found
     val userId = homeViewModel.currentUser?.uid ?: ""
 
     var startDestination = currentBottomScreen
@@ -86,6 +87,13 @@ fun HomeScreen(
                                 text = { Text("Profile", color = MaterialTheme.colorScheme.onSurface) },
                                 onClick = {
                                     navController.navigate(Profile.route)
+                                    showMenu = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("My Family Groups", color = MaterialTheme.colorScheme.onSurface) },
+                                onClick = {
+                                    navController.navigate(MyFamilyGroups.route)
                                     showMenu = false
                                 }
                             )

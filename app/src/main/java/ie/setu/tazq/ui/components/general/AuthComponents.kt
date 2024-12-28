@@ -3,6 +3,7 @@ package ie.setu.tazq.ui.components.general
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
@@ -49,6 +50,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -60,6 +62,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withAnnotation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,7 +83,6 @@ fun TaskCardPreview() {
         }
     }
 }
-
 
 @Composable
 fun GoogleSignInButtonComponent(onButtonClicked: () -> Unit) {
@@ -134,7 +136,6 @@ fun GoogleSignInButtonComponent(onButtonClicked: () -> Unit) {
 
     }
 }
-
 
 @Composable
 fun NormalTextComponent(value: String) {
@@ -227,7 +228,6 @@ fun MyTextFieldComponent(
         isError = !errorStatus
     )
 }
-
 
 @Composable
 fun PasswordTextFieldComponent(
@@ -334,6 +334,7 @@ fun ProgressBar() {
     }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun ClickableTextComponent(value: String, onTextSelected: (String) -> Unit) {
     val initialText = "By continuing you accept our "
@@ -344,28 +345,38 @@ fun ClickableTextComponent(value: String, onTextSelected: (String) -> Unit) {
     val annotatedString = buildAnnotatedString {
         append(initialText)
         withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-            pushStringAnnotation(tag = privacyPolicyText, annotation = privacyPolicyText)
-            append(privacyPolicyText)
+            withAnnotation(tag = privacyPolicyText, annotation = privacyPolicyText) { // Use withAnnotation
+                append(privacyPolicyText)
+            }
         }
         append(andText)
         withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-            pushStringAnnotation(tag = termsAndConditionsText, annotation = termsAndConditionsText)
-            append(termsAndConditionsText)
+            withAnnotation(tag = termsAndConditionsText, annotation = termsAndConditionsText) { // Use withAnnotation
+                append(termsAndConditionsText)
+            }
         }
     }
 
-    ClickableText(text = annotatedString, onClick = { offset ->
-
-        annotatedString.getStringAnnotations(offset, offset)
-            .firstOrNull()?.also { span ->
-                Timber.tag("ClickableTextComponent").d("{${span.item}}")
-
-                if ((span.item == termsAndConditionsText) || (span.item == privacyPolicyText)) {
-                    onTextSelected(span.item)
+    // Use BasicText with clickable modifier
+    BasicText(
+        text = annotatedString,
+        modifier = Modifier.clickable {
+            annotatedString.getStringAnnotations(0, annotatedString.length) // Get all annotations
+                .firstOrNull()?.let { span ->
+                    Timber.tag("ClickableTextComponent").d("{${span.item}}")
+                    if ((span.item == termsAndConditionsText) || (span.item == privacyPolicyText)) {
+                        onTextSelected(span.item)
+                    }
                 }
-            }
-
-    })
+        },
+        style = TextStyle( // Add your desired style here
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal,
+            color = Color.Black, // Or your desired color
+            textAlign = TextAlign.Start
+        )
+    )
 }
 
 @Composable
@@ -438,43 +449,42 @@ fun DividerTextComponent() {
     }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (String) -> Unit) {
-    val initialText =
-        if (tryingToLogin) "Already have an account? " else "Don’t have an account yet? "
+    val initialText = if (tryingToLogin) "Already have an account? " else "Don’t have an account yet? "
     val loginText = if (tryingToLogin) "Login" else "Register"
 
     val annotatedString = buildAnnotatedString {
         append(initialText)
         withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-            pushStringAnnotation(tag = loginText, annotation = loginText)
-            append(loginText)
+            withAnnotation(tag = loginText, annotation = loginText) {
+                append(loginText)
+            }
         }
     }
 
-    ClickableText(
+    BasicText(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 40.dp),
+            .heightIn(min = 40.dp)
+            .clickable {
+                annotatedString.getStringAnnotations(0, annotatedString.length)
+                    .firstOrNull()?.also { span ->
+                        Log.d("ClickableTextComponent", "{${span.item}}")
+
+                        if (span.item == loginText) {
+                            onTextSelected(span.item)
+                        }
+                    }
+            },
         style = TextStyle(
             fontSize = 21.sp,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal,
             textAlign = TextAlign.Center
         ),
-        text = annotatedString,
-        onClick = { offset ->
-
-            annotatedString.getStringAnnotations(offset, offset)
-                .firstOrNull()?.also { span ->
-                    Log.d("ClickableTextComponent", "{${span.item}}")
-
-                    if (span.item == loginText) {
-                        onTextSelected(span.item)
-                    }
-                }
-
-        },
+        text = annotatedString
     )
 }
 
@@ -533,7 +543,3 @@ fun AppToolbar(
         }
     )
 }
-
-
-
-

@@ -14,4 +14,8 @@ interface FirestoreService {
     suspend fun update(email: String, task: Task)
     suspend fun delete(email: String, taskId: String)
     suspend fun createFamilyGroup(group: FamilyGroup)
+    suspend fun getFamilyGroups(userId: String): Flow<List<FamilyGroup>>
+    suspend fun updateFamilyGroupName(groupId: String, newName: String)
+    suspend fun deleteFamilyGroup(groupId: String)
+    suspend fun removeUserFromFamilyGroup(groupId: String, userId: String)
 }
