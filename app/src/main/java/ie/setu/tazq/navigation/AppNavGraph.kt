@@ -9,6 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ie.setu.tazq.ui.screens.about.AboutScreen
 import ie.setu.tazq.ui.screens.categories.CategoriesScreen
+import ie.setu.tazq.ui.screens.familygroup.CreateFamilyGroupScreen
+import ie.setu.tazq.ui.screens.familygroup.MyFamilyGroupsScreen
 import ie.setu.tazq.ui.screens.login.LoginScreen
 import ie.setu.tazq.ui.screens.profile.ProfileScreen
 import ie.setu.tazq.ui.screens.register.RegisterScreen
@@ -70,6 +72,16 @@ fun NavHostProvider(
                     }
                 },
             )
+        }
+
+        composable(route = CreateFamilyGroup.route) {
+            CreateFamilyGroupScreen(onGroupCreated = {
+                navController.navigate(TaskList.route)
+            })
+        }
+
+        composable(route = MyFamilyGroups.route) {
+            MyFamilyGroupsScreen()
         }
     }
 }
