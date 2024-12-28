@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ie.setu.tazq.ui.screens.CreateFamilyGroupScreen
 import ie.setu.tazq.ui.screens.about.AboutScreen
 import ie.setu.tazq.ui.screens.categories.CategoriesScreen
 import ie.setu.tazq.ui.screens.login.LoginScreen
@@ -70,6 +71,15 @@ fun NavHostProvider(
                     }
                 },
             )
+        }
+
+        // Add the composable for the new screen
+        composable(route = CreateFamilyGroup.route) {
+            CreateFamilyGroupScreen(onGroupCreated = {
+                // Optional: Navigate to a different screen after creation
+                // navController.navigate("family_group_details/${newGroupId}")
+                navController.navigate(TaskList.route) // Navigate back to task list
+            })
         }
     }
 }
