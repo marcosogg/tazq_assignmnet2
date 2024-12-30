@@ -6,6 +6,8 @@ object Constants {
     const val USER_EMAIL = "email"
     const val TASK_COLLECTION = "tasks"
     const val FAMILY_GROUP_COLLECTION = "family_groups"
+    const val INVITATION_COLLECTION = "invitations"
+    const val USER_COLLECTION = "users"
 
     //User fields
     const val DISPLAY_NAME = "displayName"

@@ -5,8 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ie.setu.tazq.data.model.FamilyGroup
+import ie.setu.tazq.data.model.Invitation
+import ie.setu.tazq.data.model.InvitationStatus
+import ie.setu.tazq.data.model.User
 import ie.setu.tazq.firebase.services.AuthService
 import ie.setu.tazq.firebase.services.FirestoreService
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -67,5 +72,30 @@ class FamilyGroupViewModel @Inject constructor(
             firestoreService.removeUserFromFamilyGroup(groupId, userId)
             fetchFamilyGroups() // Refresh the list after leaving
         }
+    }
+
+    fun inviteUserToGroup(groupId: String, email: String) {
+        viewModelScope.launch {
+            val invitation = Invitation(
+                groupId = groupId,
+                senderId = currentUser?.uid ?: "",
+                recipientEmail = email,
+                status = InvitationStatus.PENDING
+            )
+            firestoreService.createInvitation(invitation)
+        }
+    }
+
+    suspend fun getMemberDetails(groupId: String): List<User> {
+        // First, fetch the FamilyGroup to get the memberIds
+        val familyGroup = _familyGroups.value.find { it.groupId == groupId } ?: return emptyList()
+        val memberIds = familyGroup.memberIds
+
+        // Then, fetch user details for each memberId
+        return memberIds.map { userId ->
+            viewModelScope.async {
+                firestoreService.getUserProfile(userId)
+            }
+        }.awaitAll().filterNotNull()
     }
 }

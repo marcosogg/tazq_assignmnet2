@@ -1,7 +1,9 @@
 package ie.setu.tazq.firebase.services
 
 import ie.setu.tazq.data.model.FamilyGroup
+import ie.setu.tazq.data.model.Invitation
 import ie.setu.tazq.data.model.TaskModel
+import ie.setu.tazq.data.model.User
 import kotlinx.coroutines.flow.Flow
 
 typealias Task = TaskModel
@@ -18,4 +20,6 @@ interface FirestoreService {
     suspend fun updateFamilyGroupName(groupId: String, newName: String)
     suspend fun deleteFamilyGroup(groupId: String)
     suspend fun removeUserFromFamilyGroup(groupId: String, userId: String)
+    suspend fun getUserProfile(userId: String): User?
+    suspend fun createInvitation(invitation: Invitation)
 }
