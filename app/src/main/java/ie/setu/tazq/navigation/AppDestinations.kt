@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.GroupAdd
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -79,8 +80,14 @@ object MyFamilyGroups : AppDestination {
     override val route = "my_family_groups"
 }
 
+object Invitations : AppDestination {
+    override val icon = Icons.Default.Notifications
+    override val label = "Invitations"
+    override val route = "invitations"
+}
+
 // Destinations used in the bottom navigation bar
 val bottomAppBarDestinations = listOf(TaskList, CreateTask, Categories, CreateFamilyGroup)
 
 // All destinations in the app
-val allDestinations = listOf(TaskList, CreateTask, Categories, About, Home, Profile, Login, Register, CreateFamilyGroup, MyFamilyGroups)
+val allDestinations = listOf(TaskList, CreateTask, Categories, About, Home, Profile, Login, Register, CreateFamilyGroup, MyFamilyGroups, Invitations)

@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import ie.setu.tazq.ui.screens.about.AboutScreen
 import ie.setu.tazq.ui.screens.categories.CategoriesScreen
 import ie.setu.tazq.ui.screens.familygroup.CreateFamilyGroupScreen
+import ie.setu.tazq.ui.screens.familygroup.InvitationsScreen
 import ie.setu.tazq.ui.screens.familygroup.MyFamilyGroupsScreen
 import ie.setu.tazq.ui.screens.login.LoginScreen
 import ie.setu.tazq.ui.screens.profile.ProfileScreen
@@ -82,6 +83,10 @@ fun NavHostProvider(
 
         composable(route = MyFamilyGroups.route) {
             MyFamilyGroupsScreen()
+        }
+
+        composable(route = Invitations.route) {
+            InvitationsScreen()
         }
     }
 }

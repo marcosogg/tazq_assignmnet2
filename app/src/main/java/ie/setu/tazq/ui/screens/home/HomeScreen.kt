@@ -24,6 +24,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ie.setu.tazq.navigation.About
+import ie.setu.tazq.navigation.Invitations
 import ie.setu.tazq.navigation.Login
 import ie.setu.tazq.navigation.MyFamilyGroups
 import ie.setu.tazq.navigation.NavHostProvider
@@ -77,9 +78,9 @@ fun HomeScreen(
                             modifier = Modifier.background(MaterialTheme.colorScheme.surface)
                         ) {
                             DropdownMenuItem(
-                                text = { Text("About", color = MaterialTheme.colorScheme.onSurface) },
+                                text = { Text("Invitations", color = MaterialTheme.colorScheme.onSurface) },
                                 onClick = {
-                                    navController.navigate(About.route)
+                                    navController.navigate(Invitations.route)
                                     showMenu = false
                                 }
                             )

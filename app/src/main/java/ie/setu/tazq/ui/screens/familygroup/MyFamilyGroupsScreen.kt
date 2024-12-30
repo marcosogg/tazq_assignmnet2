@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material3.AlertDialog
@@ -100,7 +100,7 @@ fun FamilyGroupItem(group: FamilyGroup, currentUserId: String, viewModel: Family
             } else {
                 // Leave Group Button
                 IconButton(onClick = { showLeaveConfirmation = true }) {
-                    Icon(Icons.Filled.ExitToApp, contentDescription = "Leave Group")
+                    Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Leave Group")
                 }
             }
         }
@@ -233,7 +233,7 @@ fun FamilyGroupItem(group: FamilyGroup, currentUserId: String, viewModel: Family
                     LazyColumn {
                         items(members) { member ->
                             // Display member information here
-                            Text(member.displayName ?: "Unknown")
+                            Text(member.displayName)
                             // Add more details as needed
                         }
                     }

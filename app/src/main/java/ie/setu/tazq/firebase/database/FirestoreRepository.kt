@@ -1,13 +1,16 @@
 package ie.setu.tazq.firebase.database
 
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.toObject
 import ie.setu.tazq.data.model.FamilyGroup
 import ie.setu.tazq.data.model.Invitation
+import ie.setu.tazq.data.model.InvitationStatus
 import ie.setu.tazq.data.model.User
 import ie.setu.tazq.data.rules.Constants
 import ie.setu.tazq.data.rules.Constants.TASK_COLLECTION
+import ie.setu.tazq.data.rules.Constants.USER_COLLECTION
 import ie.setu.tazq.data.rules.Constants.USER_EMAIL
 import ie.setu.tazq.firebase.services.AuthService
 import ie.setu.tazq.firebase.services.FirestoreService
@@ -103,10 +106,32 @@ class FirestoreRepository
     }
 
     override suspend fun getUserProfile(userId: String): User? {
-        return firestore.collection(Constants.USER_COLLECTION)
+        return firestore.collection(USER_COLLECTION)
             .document(userId)
             .get()
             .await()
             .toObject<User>()
+    }
+
+    override suspend fun updateUserProfile(user: User) {
+        firestore.collection(USER_COLLECTION).document(user.userId).set(user).await()
+    }
+
+    override suspend fun getInvitationsByRecipient(email: String): Flow<List<Invitation>> {
+        return firestore.collection(Constants.INVITATION_COLLECTION)
+            .whereEqualTo("recipientEmail", email)
+            .dataObjects()
+    }
+
+    override suspend fun updateInvitationStatus(invitationId: String, status: InvitationStatus) {
+        firestore.collection(Constants.INVITATION_COLLECTION)
+            .document(invitationId)
+            .update("status", status)
+            .await()
+    }
+
+    override suspend fun addUserToFamilyGroup(groupId: String, userId: String) {
+        val groupRef = firestore.collection(Constants.FAMILY_GROUP_COLLECTION).document(groupId)
+        groupRef.update("memberIds", FieldValue.arrayUnion(userId)).await()
     }
 }
