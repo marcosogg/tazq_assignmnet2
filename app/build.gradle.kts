@@ -93,6 +93,7 @@ dependencies {
 
     //Google Services
     implementation(libs.play.services.auth)
+    implementation(libs.gson)
 
     //Firebase
     implementation(libs.firebase.auth.ktx)
