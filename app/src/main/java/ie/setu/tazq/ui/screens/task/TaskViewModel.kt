@@ -11,10 +11,12 @@ import ie.setu.tazq.data.repository.TaskRepository
 import ie.setu.tazq.firebase.services.AuthService
 import ie.setu.tazq.firebase.services.FirestoreService
 import ie.setu.tazq.ui.components.task.TaskPriority
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,6 +60,7 @@ class TaskViewModel @Inject constructor(
 
     private val _assignedUserIds = MutableStateFlow<List<String>>(emptyList())
     val assignedUserIds: StateFlow<List<String>> = _assignedUserIds.asStateFlow()
+
 
     fun updateTaskTitle(title: String) {
         _taskTitle.value = title
@@ -131,10 +134,21 @@ class TaskViewModel @Inject constructor(
         )
 
         viewModelScope.launch {
-            repository.insert(newTask) // Insert into local Room database
-            firestoreService.insert(authService.email!!, newTaskModel) // Insert into Firestore
-            showConfirmation()
-            resetForm()
+            // Using Dispatchers.IO for database and Firestore operations
+            try {
+                withContext(Dispatchers.IO) {
+                    repository.insert(newTask) // Insert into local Room database
+                    firestoreService.insert(authService.email!!, newTaskModel) // Insert into Firestore
+                }
+
+                showConfirmation()
+                resetForm()
+            } catch (e: Exception) {
+                // Handle errors gracefully, e.g., show a Toast
+                e.printStackTrace()
+                //updateErrorState(e)
+
+            }
         }
     }
 
@@ -165,3 +179,4 @@ class TaskViewModel @Inject constructor(
         } else null
     }
 }
+

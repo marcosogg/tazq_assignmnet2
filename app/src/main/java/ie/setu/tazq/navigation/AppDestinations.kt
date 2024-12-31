@@ -87,7 +87,8 @@ object Invitations : AppDestination {
 }
 
 // Destinations used in the bottom navigation bar
-val bottomAppBarDestinations = listOf(TaskList, CreateTask, Categories, CreateFamilyGroup)
+// Updated the order of bottom navigation items
+val bottomAppBarDestinations = listOf(CreateTask, TaskList, MyFamilyGroups, Categories)
 
 // All destinations in the app
 val allDestinations = listOf(TaskList, CreateTask, Categories, About, Home, Profile, Login, Register, CreateFamilyGroup, MyFamilyGroups, Invitations)

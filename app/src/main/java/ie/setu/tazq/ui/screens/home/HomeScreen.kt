@@ -2,7 +2,13 @@ package ie.setu.tazq.ui.screens.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -12,13 +18,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -34,12 +44,14 @@ import ie.setu.tazq.navigation.allDestinations
 import ie.setu.tazq.ui.components.general.BottomAppBarProvider
 import ie.setu.tazq.ui.components.general.TopAppBarProvider
 import ie.setu.tazq.ui.theme.TazqTheme
+import ie.setu.tazq.ui.viewmodel.InvitationViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
+    invitationViewModel: InvitationViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
 ) {
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
@@ -55,6 +67,7 @@ fun HomeScreen(
     if (isActiveSession) startDestination = TaskList
 
     var showMenu by remember { mutableStateOf(false) } // Add this for the overflow menu
+    val invitations by invitationViewModel.invitations.collectAsState()
 
     Scaffold(
         modifier = modifier,
@@ -65,12 +78,32 @@ fun HomeScreen(
                 navigateUp = { navController.navigateUp() },
                 actions = { // Add actions parameter here to add items to the TopAppBar
                     if (isActiveSession && currentBottomScreen != About && currentBottomScreen != Profile) {
-                        IconButton(onClick = { showMenu = !showMenu }) {
-                            Icon(
-                                imageVector = Icons.Filled.MoreVert,
-                                contentDescription = "More",
-                                tint = Color.White
-                            )
+                        // Display a notification dot using a Box with a Badge
+                        Box(modifier = Modifier.size(48.dp)) {
+                            IconButton(
+                                onClick = { showMenu = !showMenu },
+                                modifier = Modifier.align(Alignment.Center)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.MoreVert,
+                                    contentDescription = "More",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+
+                            if (invitations.isNotEmpty()) {
+                                Icon(
+                                    imageVector = Icons.Filled.Badge,
+                                    contentDescription = "Pending Invitations",
+                                    modifier = Modifier
+                                        .size(18.dp)
+                                        .align(Alignment.TopEnd)
+                                        .padding(4.dp)
+                                        .clip(CircleShape),
+                                    tint = Color.Red
+                                )
+                            }
                         }
                         DropdownMenu(
                             expanded = showMenu,
@@ -78,25 +111,28 @@ fun HomeScreen(
                             modifier = Modifier.background(MaterialTheme.colorScheme.surface)
                         ) {
                             DropdownMenuItem(
-                                text = { Text("Invitations", color = MaterialTheme.colorScheme.onSurface) },
-                                onClick = {
-                                    navController.navigate(Invitations.route)
-                                    showMenu = false
-                                }
-                            )
-                            DropdownMenuItem(
                                 text = { Text("Profile", color = MaterialTheme.colorScheme.onSurface) },
                                 onClick = {
                                     navController.navigate(Profile.route)
                                     showMenu = false
-                                }
+                                },
+                                modifier = Modifier.sizeIn(minHeight = 48.dp)
                             )
                             DropdownMenuItem(
-                                text = { Text("My Family Groups", color = MaterialTheme.colorScheme.onSurface) },
+                                text = { Text("Invitations", color = MaterialTheme.colorScheme.onSurface) },
+                                onClick = {
+                                    navController.navigate(Invitations.route)
+                                    showMenu = false
+                                },
+                                modifier = Modifier.sizeIn(minHeight = 48.dp)
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Family Groups", color = MaterialTheme.colorScheme.onSurface) },
                                 onClick = {
                                     navController.navigate(MyFamilyGroups.route)
                                     showMenu = false
-                                }
+                                },
+                                modifier = Modifier.sizeIn(minHeight = 48.dp)
                             )
                         }
                     }

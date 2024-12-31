@@ -20,6 +20,10 @@ class InvitationViewModel @Inject constructor(
     private val _invitations = MutableStateFlow<List<Invitation>>(emptyList())
     val invitations = _invitations.asStateFlow()
 
+    init {
+        fetchInvitations()
+    }
+
     fun fetchInvitations() {
         val currentUserEmail = authService.currentUser?.email ?: return
 

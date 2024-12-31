@@ -3,6 +3,7 @@ package ie.setu.tazq.ui.components.general
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
@@ -34,14 +35,17 @@ fun DropDownMenu() {
         contentAlignment = Alignment.Center,
     ) {
         // 3 vertical dots icon
-        IconButton(onClick = {
-            expanded = true
-        }) {
+        IconButton(
+            onClick = {
+                expanded = true
+            },
+            modifier = Modifier.size(48.dp) // Ensure touch target is at least 48dp x 48dp
+        ) {
             Icon(
                 imageVector = Icons.Default.MoreVert,
                 contentDescription = "Open Info",
                 tint = Color.White,
-                modifier = Modifier.size(30.dp)
+                modifier = Modifier.size(24.dp) // Icon size remains 24dp x 24dp
             )
         }
         DropdownMenu(
@@ -56,13 +60,14 @@ fun DropDownMenu() {
                         imageVector = Icons.Filled.Info,
                         contentDescription = "Info",
                         tint = Color.White,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(24.dp) // Icon size remains 24dp x 24dp
                     )
                 },
                 onClick = {
                     selectedOptionText = "Info"
                     expanded = false
                 },
+                modifier = Modifier.sizeIn(minHeight = 48.dp) // Ensure menu item touch target is at least 48dp high
             )
         }
     }
